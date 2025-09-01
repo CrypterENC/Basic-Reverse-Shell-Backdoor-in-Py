@@ -41,22 +41,6 @@ cd Python_Tools_For_Offensive
 # Install required packages
 pip install -r requirements.txt
 ```
-
-### Usage Examples
-
-#### DNS Enumeration
-
-```bash
-python dns_enumeration/dns_enum.py -d example.com -o results.txt
-```
-
-## Requirements
-
-- dnspython
-- requests
-- argparse
-- colorama
-
 ## Security Considerations
 
 - Always use these tools in environments where you have explicit permission
