@@ -45,7 +45,7 @@
 
 ### Output : 
 
-```bash hl:50 title:output.md
+```bash title:output.md
 
 python3 dns/dns_enum.py youtube.com
 
