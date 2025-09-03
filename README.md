@@ -1,5 +1,5 @@
 
-# 🐚 Python Reverse Shell (Server + Client)
+# 🐚 **Python Reverse Shell (Server + Client)**
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue.svg">
@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <img src="rsrc/1.png" alt="Reverse Shell Demo" width="600">
+  <img src="https://github.com/CrypterENC/Basic-Reverse-Shell-in-Python/blob/main/Basic%20Reverse%20Shell%20Backdoor/rsrc/1.png" alt="Reverse Shell Demo" style="width: 400px; height: 200px; object-fit: cover; object-position: center;">
 </p>
 
 This project demonstrates a **basic reverse shell** implementation in Python for controlled lab use.  
