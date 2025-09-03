@@ -7,6 +7,10 @@
   <img src="https://img.shields.io/badge/Category-Offensive%20Security-red.svg">
 </p>
 
+<p align="center">
+  <img src="rsrc/1.png" alt="Reverse Shell Demo" width="600">
+</p>
+
 This project demonstrates a **basic reverse shell** implementation in Python for controlled lab use.  
 It consists of two components:
 
